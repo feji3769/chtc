@@ -1,9 +1,9 @@
 #/bin/bash
 docker build \
-    -t jobrachem/chtc_test:image.1 \
+    -t [UPDATE_DOCKERHUB_USERNAME]/[UPDATE_DOCKERHUB_REPO]:[UPDATE_DOCKER_IMAGE_TAG] \
     --no-cache\
-    --build-arg UID=26064 \
-    --build-arg GID=26064 \
-    --build-arg DOCKER_USER=jobrachem \
-    --build-arg GIT_EMAIL="jobrachem@posteo.de" \
-    --build-arg GIT_USERNAME=jobrachem .
+    --build-arg UID=[UPDATE_USER_ID] \
+    --build-arg GID=[UPDATE_GROUP_ID] \
+    --build-arg DOCKER_USER=[UPDATE_DOCKERHUB_USERNAME] \
+    --build-arg GIT_EMAIL="[UPDATE_GIT_EMAIL]" \
+    --build-arg GIT_USERNAME=[UPDATE_GIT_USERNAME] .

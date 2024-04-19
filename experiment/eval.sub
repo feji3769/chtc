@@ -1,13 +1,13 @@
 # HTC Submit File
 
 # Provide HTCondor with the name of the Docker container
-container_image = docker://jobrachem/chtc_test:image.1
+container_image = docker://[UPDATE_DOCKERHUB_USERNAME]/[UPDATE_DOCKERHUB_REPO]:[UPDATE_DOCKER_IMAGE_TAG]
 universe = container
 
 arguments = $(seed) $(model)
 executable = eval.sh
 
-transfer_input_files = /home/brachem/.ssh/id_ed25519
+transfer_input_files = /home/[UPDATE_YOUR_NETID]/.ssh/[UPDATE_SSH_KEY_NAME]
 
 initialdir = runs/Run$(Process)
 log = eval.log
