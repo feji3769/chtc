@@ -21,49 +21,92 @@ Host [NAME] # your nickname for the server
 
 3. Create an SSH key on the server. You can follow [GitHubs guide](https://docs.github.com/de/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 4. Add the server's public SSH key to your GitHub account in your account settings.
+5. Run `id -u` to access your user ID and note that ID down.
+6. Create an account on Dockerhub and install Docker on your local machine
 
 ## Update the scripts
 
-1. Update eval.sh with correct filepaths
-2. Update container/build.sh
-    - Name of the docker image
-    - User ID and group ID on the remote server
-    - Git info
-3. Update eval.sub with correct filepaths and docker image
-
+1. Update container/build.sh
+2. Update eval.sh
+3. Update eval.sub
 
 
 ## Build the docker image
+
+Building the image might take a while.
 
 ```
 cd container
 sh build.sh
 ```
 
-
-## Push the docker image to DockerHub
+After building is done, push the image to Dockerhub.
 
 
 ## Run the job on the CHTC
 
-1. Create the run directories
+### Pull your repository to the server
 
+Something like this:
 
 ```
-cd ~/git/chtc/experiment
-condor_submit eval.sh
+ssh <NAME>
+mkdir projects
+cd projects
+git clone <REPO>
 ```
 
-## Monitor
+Make sure that you are in the correct branch and pull the latest changes.
+
+### Create the run directories
+
+The submit file `eval.sub` contains the following line:
+
+```
+initialdir = runs/Run$(Process)
+```
+
+This means that, for each process that is started, an individual directory will be
+used to store log files and output, e.g. `experiment/runs/Run0`, `experiment/runs/Run1`,
+etc.
+
+You need to create these directories submitting the job; they will *not* be created
+automatically. The number of processes is equal to the number of rows in 
+`experiment/params.txt` - but beware that process counting starts at `0`.
+
+### Submit the job
+
+To submit the job, you change into the experiment directory and run:
+
+```
+cd ~/projects/chtc/experiment # maybe you need to update this filepath
+condor_submit eval.sub
+```
+
+### Monitor your run
+
+On the server, you can run the following code to see the status of your job:
 
 ```
 condor_q
 ```
 
-More detailed output.
+More detailed output is achieved with this command:
 
 ```
 condor_q ana
 ```
 
+## Handle the output of your runs
 
+Generally, all files you create during a run will be located in the
+`/experiment/runs/Run[i]` directory and persist after your run is finished. 
+However, storage is limited. 
+You should therefore write your `experiment/eval.sh` in such a way that you
+move any output that you save from a run to your `/staging/[NETID]` directory and
+delete the additional files in the `/experiment/runs/Run[i]` immediately.
+
+### Remote tracking
+
+You may want to check out [Weights & Biases](https://wandb.ai/site) or 
+[MLFlow](https://mlflow.org) for remote tracking of your runs.
