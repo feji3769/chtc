@@ -1,17 +1,18 @@
 # HTC Submit File
 
 # Provide HTCondor with the name of the Docker container
-container_image = docker://felixj3/pskips:felix_chtc_0.0.4
+container_image = docker://jobrachem/chtc_test:image.1
 universe = container
 
 arguments = $(seed) $(model)
-executable = train.sh
-transfer_input_files = /home/fjimenez2/.ssh/id_rsa,/home/fjimenez2/.aws/credentials
+executable = eval.sh
+
+transfer_input_files = /home/brachem/.ssh/id_ed25519
 
 initialdir = runs/Run$(Process)
-log = train.log
-error = train.error
-output = train.out
+log = eval.log
+error = eval.error
+output = eval.out
 
 
 request_cpus = 2
