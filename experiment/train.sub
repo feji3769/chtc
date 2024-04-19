@@ -1,0 +1,22 @@
+# HTC Submit File
+
+# Provide HTCondor with the name of the Docker container
+container_image = docker://felixj3/pskips:felix_chtc_0.0.4
+universe = container
+
+arguments = $(seed) $(model)
+executable = train.sh
+transfer_input_files = /home/fjimenez2/.ssh/id_rsa,/home/fjimenez2/.aws/credentials
+
+initialdir = runs/Run$(Process)
+log = train.log
+error = train.error
+output = train.out
+
+
+request_cpus = 2
+request_memory = 16GB
+request_disk = 5GB
+
+
+queue seed, model from params.txt
